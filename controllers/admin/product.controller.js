@@ -20,13 +20,29 @@ module.exports.index = async (req, res) => {
             find.title=ObjectSearch.regex
         }
 
-        const products = await Product.find(find);
+        // pagination
+        let objectPagination={
+            currentPage:1,
+            limitItem: 4
+        };
+        if(req.query.page){
+            objectPagination.currentPage=parseInt(req.query.page);
+        }
+        objectPagination.skip = (objectPagination.currentPage - 1)*objectPagination.limitItem;
+        const CountProducts = await Product.countDocuments(find);
+        const totalPage = Math.ceil(CountProducts/objectPagination.limitItem);
+        objectPagination.totalPage=totalPage;
+
+        // end pagination
+
+        const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip);
 
         res.render("admin/pages/products/index", {
             pageTitle: "Danh sach san pham",
             products: products,
             filterStatus: filterStatus,
-            keyword: ObjectSearch.keyword
+            keyword: ObjectSearch.keyword,
+            pagination:objectPagination
         });
     } catch (error) {
         console.error(error);
