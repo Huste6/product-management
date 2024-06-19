@@ -3,7 +3,7 @@ const filterStatusHelper=require("../../helpers/filterStatus")
 const SearchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
 
-// [GET] /admin/product
+// [GET] /admin/products
 module.exports.index = async (req, res) => {
     try {
         // Doan nay la doan bo loc
@@ -27,8 +27,6 @@ module.exports.index = async (req, res) => {
             currentPage:1,
             limitItem: 4
         },req.query,CountProducts);
-
-
         // end pagination
 
         const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip);
@@ -45,3 +43,18 @@ module.exports.index = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+// [GET] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async(req, res)=>{
+    try{
+        const status=req.params.status;
+        const id=req.params.id;
+
+        await Product.updateOne({_id: id},{status: status})
+
+        res.redirect("back")
+    }catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
