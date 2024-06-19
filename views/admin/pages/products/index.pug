@@ -1,6 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/filterStatus.pug
-
+include ../../mixins/formSearch.pug
 block main
     h1 Trang danh sach san pham
 
@@ -11,20 +11,7 @@ block main
                 .col-6
                     +filter-status(filterStatus)
                 .col-3 
-                    form(id="form-search")
-                        .input-group
-                            input(
-                                type="text"
-                                placeholder="Nhap tu khoa"
-                                name="keyword"
-                                class="form-control"
-                                value=keyword
-                            )
-                            .input-group-append 
-                                button(
-                                    class="btn btn-success"
-                                    type="submit"
-                                ) Tim
+                    +Search(keyword)
     .card.mb-3 
         .card-header Danh sach
         .card-body 

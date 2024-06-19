@@ -1,0 +1,15 @@
+mixin Search(keyword)
+    form(id="form-search")
+        .input-group
+            input(
+                type="text"
+                placeholder="Nhap tu khoa"
+                name="keyword"
+                class="form-control"
+                value=keyword
+            )
+            .input-group-append 
+                button(
+                    class="btn btn-success"
+                    type="submit"
+                ) Tim
