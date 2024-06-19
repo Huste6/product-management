@@ -1,4 +1,5 @@
 extends ../../layouts/default.pug
+include ../../mixins/filterStatus.pug
 
 block main
     h1 Trang danh sach san pham
@@ -8,8 +9,7 @@ block main
         .card-body 
             .row
                 .col-6
-                    each item in filterStatus
-                        button(class=`btn btn-sm ml-1 btn-outline-success ${item.class}` button-status=item.status) #{item.name}
+                    +filter-status(filterStatus)
                 .col-3 
                     form(id="form-search")
                         .input-group

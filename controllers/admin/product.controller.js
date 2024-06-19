@@ -1,25 +1,11 @@
 const Product = require("../../models/product.model");
+const filterStatusHelper=require("../../helpers/filterStatus")
 
 // [GET] /admin/product
 module.exports.index = async (req, res) => {
     try {
-        let filterStatus = [
-            {
-                name: "Tat ca",
-                status: "",
-                class: req.query.status === "" || !req.query.status ? "active" : ""
-            },
-            {
-                name: "Hoat dong",
-                status: "active",
-                class: req.query.status === "active" ? "active" : ""
-            },
-            {
-                name: "Dung hoat dong",
-                status: "inactive",
-                class: req.query.status === "inactive" ? "active" : ""
-            }
-        ];
+        // Doan nay la doan bo loc
+        const filterStatus=filterStatusHelper(req.query);
 
         let find = {
             deleted: false
