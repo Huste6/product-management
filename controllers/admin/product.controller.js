@@ -1,5 +1,5 @@
 const Product = require("../../models/product.model");
-const filterStatusHelper=require("../../helpers/filterStatus")
+const filterStatusHelper = require("../../helpers/filterStatus")
 const SearchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
 
@@ -7,7 +7,7 @@ const paginationHelper = require("../../helpers/pagination")
 module.exports.index = async (req, res) => {
     try {
         // Doan nay la doan bo loc
-        const filterStatus=filterStatusHelper(req.query);
+        const filterStatus = filterStatusHelper(req.query);
 
         let find = {
             deleted: false
@@ -17,16 +17,16 @@ module.exports.index = async (req, res) => {
         }
         // Doan code phan tim kiem
         const ObjectSearch = SearchHelper(req.query);
-        if(ObjectSearch.regex){
-            find.title=ObjectSearch.regex
+        if (ObjectSearch.regex) {
+            find.title = ObjectSearch.regex
         }
 
         // pagination
         const CountProducts = await Product.countDocuments(find);
-        let objectPagination=paginationHelper({
-            currentPage:1,
+        let objectPagination = paginationHelper({
+            currentPage: 1,
             limitItem: 4
-        },req.query,CountProducts);
+        }, req.query, CountProducts);
         // end pagination
 
         const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip);
@@ -36,7 +36,7 @@ module.exports.index = async (req, res) => {
             products: products,
             filterStatus: filterStatus,
             keyword: ObjectSearch.keyword,
-            pagination:objectPagination
+            pagination: objectPagination
         });
     } catch (error) {
         console.error(error);
@@ -45,52 +45,55 @@ module.exports.index = async (req, res) => {
 };
 
 // [PATCH] /admin/products/change-status/:status/:id
-module.exports.changeStatus = async(req, res)=>{
-    try{
-        const status=req.params.status;
-        const id=req.params.id;
+module.exports.changeStatus = async (req, res) => {
+    try {
+        const status = req.params.status;
+        const id = req.params.id;
 
-        await Product.updateOne({_id: id},{status: status})
+        await Product.updateOne({ _id: id }, { status: status })
 
         res.redirect("back")
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
 }
 
 // [PATCH] /admin/products/change-multi
-module.exports.changeMulti = async(req, res)=>{
-    try{
+module.exports.changeMulti = async (req, res) => {
+    try {
         // console.log(req.body)
-        const type=req.body.type
-        const ids=req.body.ids.split(", ")
-        switch(type){
+        const type = req.body.type
+        const ids = req.body.ids.split(", ")
+        switch (type) {
             case "active":
-                await Product.updateMany({_id: {$in: ids}},{status: "active"})
+                await Product.updateMany({ _id: { $in: ids } }, { status: "active" })
                 break;
             case "inactive":
-                await Product.updateMany({_id: {$in: ids}},{status: "inactive"})
+                await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" })
+                break;
+            case "delete-all":
+                await Product.updateMany({ _id: { $in: ids } }, { deleted: true, deletedAt: new Date() })
                 break;
             default:
                 break;
         }
         res.redirect("back")
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
 }
 
 // [DELETE] /admin/products/delete/:id
-module.exports.DeleteItem = async(req, res)=>{
-    try{
-        const id=req.params.id;
+module.exports.DeleteItem = async (req, res) => {
+    try {
+        const id = req.params.id;
 
-        await Product.updateOne({_id: id},{deleted:true, deletedAt: new Date()})
-        
+        await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() })
+
         res.redirect("back")
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }

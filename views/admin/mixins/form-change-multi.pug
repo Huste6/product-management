@@ -7,8 +7,10 @@ mixin form-change-multi(path)
         .d-flex.align-items-start 
             .form-group
                 select(name="type" class="form-control")
+                    option(disabled selected) -- Chon hanh dong -- 
                     option(value="active") Hoat dong 
                     option(value="inactive") Dung hoat dong 
+                    option(value="delete-all") Xoa tat ca
             .form-group
                 input(
                     type="text"

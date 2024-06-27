@@ -91,6 +91,16 @@ if(formChangeMulti){
         
         const checkBoxMulti = document.querySelector("[checkbox-multi]")
         const inputChecked = checkBoxMulti.querySelectorAll("input[name='id']:checked");
+        
+        const typeChange = event.target.elements.type.value
+
+        if(typeChange=="delete-all"){
+            const isConfirm = confirm("Ban co chac chan muon xoa nhung san pham nay?")
+            if(!isConfirm){
+                return;
+            }
+        }
+
         if(inputChecked.length > 0){
             let ids = [];
             const inputIDS = formChangeMulti.querySelector("input[name='ids']")
