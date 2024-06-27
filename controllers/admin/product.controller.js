@@ -81,3 +81,15 @@ module.exports.changeMulti = async(req, res)=>{
         res.status(500).send("Internal Server Error");
     }
 }
+
+// [DELETE] /admin/products/delete/:id
+module.exports.DeleteItem = async(req, res)=>{
+    try{
+        const id=req.params.id;
+        await Product.deleteOne({_id: id})
+        res.redirect("back")
+    }catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
