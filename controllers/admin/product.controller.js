@@ -2,6 +2,7 @@ const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus")
 const SearchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
+const systemConfig = require('../../config/system')
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -142,10 +143,12 @@ module.exports.createPost = async (req, res) => {
         }else{
             req.body.position = parseInt(req.body.position);
         }
+        req.body.thumbnail = `/uploads/${req.file.filename}`;
+
         const product = new Product(req.body);
         await product.save();
 
-        res.redirect(`/admin/products`)
+        res.redirect(`${systemConfig.prefixAdmin}/products`)
     } catch (error) {
         console.error(error.stack);
         res.status(500).send("Internal Server Error");

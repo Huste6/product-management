@@ -1,17 +1,20 @@
 const express = require("express")
+const multer = require('multer')
 const router = express.Router();
+const storageMulter = require("../../helpers/storageMulter")
+const upload = multer({ storage: storageMulter() })
 const controller = require("../../controllers/admin/product.controller")
 
-router.get('/',controller.index);
+router.get('/', controller.index);
 
-router.patch('/change-status/:status/:id',controller.changeStatus);
+router.patch('/change-status/:status/:id', controller.changeStatus);
 
-router.patch('/change-multi',controller.changeMulti)
+router.patch('/change-multi', controller.changeMulti)
 
-router.delete('/delete/:id',controller.DeleteItem);
+router.delete('/delete/:id', controller.DeleteItem);
 
-router.get('/create',controller.create); // lay ra trang tao moi san pham
+router.get('/create', controller.create); // lay ra trang tao moi san pham
 
-router.post('/create',controller.createPost);
+router.post('/create',upload.single('thumbnail'),controller.createPost);
 
 module.exports = router;
