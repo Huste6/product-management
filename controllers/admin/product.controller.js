@@ -55,6 +55,8 @@ module.exports.changeStatus = async (req, res) => {
 
         await Product.updateOne({ _id: id }, { status: status })
 
+        req.flash("success","Cap nhat trang thai san pham thanh cong!")
+
         res.redirect("back")
     } catch (error) {
         console.error(error);
@@ -71,12 +73,15 @@ module.exports.changeMulti = async (req, res) => {
         switch (type) {
             case "active":
                 await Product.updateMany({ _id: { $in: ids } }, { status: "active" })
+                req.flash("success",`Cap nhat trang thai ${ids.length} san pham thanh cong!`)
                 break;
             case "inactive":
                 await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" })
+                req.flash("success",`Cap nhat trang thai ${ids.length} san pham thanh cong!`)
                 break;
             case "delete-all":
                 await Product.updateMany({ _id: { $in: ids } }, { deleted: true, deletedAt: new Date() })
+                req.flash("success",`Xoa ${ids.length} san pham thanh cong!`)
                 break;
             case "change-position":
                 for (const item of ids) {
@@ -84,6 +89,7 @@ module.exports.changeMulti = async (req, res) => {
                     position=parseInt(position);
                     await Product.updateOne({_id: id},{position: position})
                 } 
+                req.flash("success","Cap nhat trang thai san pham thanh cong!")
                 break;
             default:
                 break;
@@ -101,6 +107,8 @@ module.exports.DeleteItem = async (req, res) => {
         const id = req.params.id;
 
         await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() })
+
+        req.flash("success",`Xoa san pham thanh cong!`)
 
         res.redirect("back")
     } catch (error) {

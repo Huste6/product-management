@@ -1,13 +1,16 @@
 const express = require('express')
 var methodOverride = require('method-override')
 require('dotenv').config();
-
+var flash = require('express-flash')
 const database = require("./config/database")
 
 const systemConfig = require("./config/system")
 const route = require("./routes/client/index.router")
 const routeAdmin = require("./routes/admin/index.router")
 var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
+
 database.connect();
 
 const app = express();
@@ -19,6 +22,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.set('views', './views');
 app.set('view engine', 'pug');
+
+// flash
+app.use(cookieParser('my password'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
+// end flash
 
 app.use(express.static('public'));
 

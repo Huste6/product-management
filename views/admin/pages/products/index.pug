@@ -3,9 +3,11 @@ include ../../mixins/filterStatus.pug
 include ../../mixins/formSearch.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
 
 block main
     h1 Trang danh sach san pham
+    +alert-success("5000")
 
     .card.mb-3 
         .card-header Bo loc va Tim kiem 
