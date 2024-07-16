@@ -116,3 +116,38 @@ module.exports.DeleteItem = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 }
+
+//[GET] /admin/products/create
+module.exports.create = async (req,res) => {
+    try{
+        res.render("admin/pages/products/create", {
+            pageTitle: "Them moi san pham"
+        });
+    }catch(error){
+        console.error(error)
+        res.status(500).send("Internal Server Error")
+    }
+}
+
+//[POST] /admin/products/create
+module.exports.createPost = async (req, res) => {
+    try {
+        req.body.price=parseInt(req.body.price)
+        req.body.discountPercentage=parseInt(req.body.discountPercentage)
+        req.body.stock=parseInt(req.body.stock)
+
+        if(req.body.position == ''){
+            const CountProducts = await Product.countDocuments();
+            req.body.position = CountProducts + 1;
+        }else{
+            req.body.position = parseInt(req.body.position);
+        }
+        const product = new Product(req.body);
+        await product.save();
+
+        res.redirect(`/admin/products`)
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).send("Internal Server Error");
+    }
+}

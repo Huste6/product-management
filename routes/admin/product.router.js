@@ -10,4 +10,8 @@ router.patch('/change-multi',controller.changeMulti)
 
 router.delete('/delete/:id',controller.DeleteItem);
 
+router.get('/create',controller.create); // lay ra trang tao moi san pham
+
+router.post('/create',controller.createPost);
+
 module.exports = router;
