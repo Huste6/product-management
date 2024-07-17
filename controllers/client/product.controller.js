@@ -1,5 +1,5 @@
 const Product = require("../../models/product.model");
-// [GET] /products
+// [GET] /product
 module.exports.index = async (req, res) => {
   try {
     const products = await Product.find({
@@ -23,3 +23,23 @@ module.exports.index = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+// [GET] /product/:slug
+module.exports.detail = async (req,res) => {
+  try{
+    const find = {
+      deleted: false,
+      slug: req.params.slug,
+      status: "active"
+    };
+
+    const product = await Product.findOne(find);
+    
+    res.render("client/pages/products/detail",{
+      pageTitle: "Chi tiết sản phẩm",
+      product: product
+    })
+  }catch(error){
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
