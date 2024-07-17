@@ -83,7 +83,10 @@ block main
                                         class="badge badge-danger"
                                     ) Dung hoat dong 
                             td 
-                                button(class="btn btn-warning btn-sm") Sua 
+                                a(
+                                    href=`${prefixAdmin}/products/edit/${item.id}`
+                                    class="btn btn-warning btn-sm"
+                                ) Sua 
                                 button(
                                     class="btn btn-danger btn-sm ml-1"
                                     button-delete
