@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 var methodOverride = require('method-override')
 require('dotenv').config();
 var flash = require('express-flash')
@@ -29,6 +30,9 @@ app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 // end flash
 
+// tinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+// end tinyMCE
 app.use(express.static(`${__dirname}/public`));
 
 // app local variables

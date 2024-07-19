@@ -1,6 +1,9 @@
 body {
     overflow-x: hidden;
 }
+.main{
+    max-width: calc(100% - 170px);
+}
 /* header */
 .header{
     background: #202020;
