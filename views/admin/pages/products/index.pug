@@ -4,6 +4,7 @@ include ../../mixins/formSearch.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
+include ../../mixins/sort.pug
 
 block main
     h1 Trang danh sach san pham
@@ -17,6 +18,13 @@ block main
                     +filter-status(filterStatus)
                 .col-3 
                     +Search(keyword)
+    
+    .card.mb-3 
+        .card-header Sắp xếp
+        .card-body
+            .row
+                .col-4
+                    +sort()
     .card.mb-3 
         .card-header Danh sach
         .card-body 
