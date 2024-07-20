@@ -119,3 +119,17 @@ module.exports.detail = async (req,res) => {
         res.redirect(`${systemConfig.prefixAdmin}/product-category`);
     }
 }
+
+// [DELETE] /admin/product-category/delete/:id
+module.exports.DeleteItem = async (req,res) => {
+    try{
+        const id = req.params.id;
+        await ProductCategory.updateOne({_id: id},{deleted: True, deletedAt: new Date()});
+        req.flash("success",`Xoa san pham thanh cong!`)
+
+        res.redirect("back")
+    }catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}

@@ -30,4 +30,6 @@ router.patch(
 
 router.get('/detail/:id',controller.detail)
 
+router.delete('/delete/:id', controller.DeleteItem);
+
 module.exports = router;
