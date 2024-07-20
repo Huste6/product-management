@@ -3,6 +3,8 @@ const filterStatusHelper = require("../../helpers/filterStatus")
 const SearchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
 const systemConfig = require('../../config/system')
+const createTreeHelpers = require('../../helpers/create-tree')
+const ProductCategory = require("../../models/product-category.model")
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -130,8 +132,14 @@ module.exports.DeleteItem = async (req, res) => {
 //[GET] /admin/products/create
 module.exports.create = async (req,res) => {
     try{
+        const record = await ProductCategory.find({
+            deleted: false
+        })
+        const newRecord = createTreeHelpers.tree(record)
+
         res.render("admin/pages/products/create", {
-            pageTitle: "Them moi san pham"
+            pageTitle: "Them moi san pham",
+            record: newRecord
         });
     }catch(error){
         console.error(error)
