@@ -173,6 +173,11 @@ module.exports.createPost = async (req, res) => {
 //[GET] /admin/products/edit/:id
 module.exports.edit = async (req,res) => {
     try{
+        const record = await ProductCategory.find({
+            deleted: false
+        })
+        const newRecord = createTreeHelpers.tree(record)
+
         const find = {
             deleted: false,
             _id: req.params.id
@@ -181,7 +186,8 @@ module.exports.edit = async (req,res) => {
 
         res.render("admin/pages/products/edit.pug", {
             pageTitle: "Chỉnh sửa sản phẩm",
-            product: product
+            product: product,
+            record: newRecord
         });
     }catch(error){
         res.redirect(`${systemConfig.prefixAdmin}/products`)
