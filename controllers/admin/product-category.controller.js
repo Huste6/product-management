@@ -55,3 +55,41 @@ module.exports.createPost = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 }
+
+// [GET] /admin/product-category/edit/:id
+module.exports.edit = async (req,res) => {
+    try{
+        const find = {
+            deleted: false,
+            _id: req.params.id
+        }
+        const product = await ProductCategory.findOne(find);
+
+        const record = await ProductCategory.find({
+            deleted: false
+        });
+        const newRecord = createTreeHelpers.tree(record);
+        res.render("admin/pages/product-category/edit.pug", {
+            pageTitle: "Chỉnh sửa danh muc sản phẩm",
+            product: product,
+            record: newRecord
+        });
+    }catch{
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// [PATCH] /admin/product-category/edit/:id
+module.exports.editPatch = async (req,res) => {
+    const id = req.params.id;
+    req.body.position = parseInt(req.body.position);
+    
+    try{
+        await ProductCategory.updateOne({_id: id},req.body);
+        req.flash("success",`Cap nhat thanh cong!`)
+    }catch (error){
+        req.flash("error",`Cap nhat that bai!`)
+    }
+    res.redirect("back");
+}
