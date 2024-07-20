@@ -93,3 +93,30 @@ module.exports.editPatch = async (req,res) => {
     }
     res.redirect("back");
 }
+
+// [GET] /admin/product-category/detail/:id
+module.exports.detail = async (req,res) => {
+    try{
+        const find = {
+            deleted: false,
+            _id: req.params.id
+        }
+        const product = await ProductCategory.findOne(find);
+        
+        const find_parent = {
+            deleted: false,
+            _id: product.parent_id
+        }
+
+        const parent = await ProductCategory.findOne(find_parent);
+
+        res.render("admin/pages/product-category/detail",{
+            pageTitle: product.title ,
+            product: product,
+            parent: parent
+        });
+    }catch(error){
+        console.error(error);
+
+    }
+}
