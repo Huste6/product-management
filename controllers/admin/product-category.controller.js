@@ -116,7 +116,6 @@ module.exports.detail = async (req,res) => {
             parent: parent
         });
     }catch(error){
-        console.error(error);
-
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
     }
 }
