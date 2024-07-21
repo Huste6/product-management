@@ -123,8 +123,7 @@ module.exports.detail = async (req,res) => {
 // [DELETE] /admin/product-category/delete/:id
 module.exports.DeleteItem = async (req,res) => {
     try{
-        const id = req.params.id;
-        await ProductCategory.updateOne({_id: id},{deleted: True, deletedAt: new Date()});
+        await ProductCategory.updateOne({_id: req.params.id},{deleted: true, deletedAt: new Date()});
         req.flash("success",`Xoa san pham thanh cong!`)
 
         res.redirect("back")
