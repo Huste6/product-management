@@ -4,7 +4,7 @@ var methodOverride = require('method-override')
 require('dotenv').config();
 var flash = require('express-flash')
 const database = require("./config/database")
-
+const moment = require("moment")
 const systemConfig = require("./config/system")
 const route = require("./routes/client/index.router")
 const routeAdmin = require("./routes/admin/index.router")
@@ -37,6 +37,8 @@ app.use(express.static(`${__dirname}/public`));
 
 // app local variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
+app.locals.moment = moment
+
 // Routes
 route(app);
 routeAdmin(app);

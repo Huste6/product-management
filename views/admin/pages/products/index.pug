@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 
 block main
     if(role.permissions.includes("products-view"))
@@ -53,6 +54,7 @@ block main
                             th Gia 
                             th Vi tri
                             th Trang thai 
+                            th Người tạo
                             th Hanh dong
                     tbody 
                         each item, index in products
@@ -109,7 +111,11 @@ block main
                                                 data-id=item.id
                                                 class="badge badge-danger"
                                             ) Dung hoat dong
-                                td  
+                                td 
+                                    p #{item.accountFullName}
+                                    p
+                                        +formatDateTime(item.createdBy.createdAt)
+                                td
                                     a(
                                         href=`${prefixAdmin}/products/detail/${item.id}`
                                         class="btn btn-secondary btn-sm"
