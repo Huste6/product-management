@@ -102,7 +102,17 @@ module.exports.changeMulti = async (req, res) => {
                 req.flash("success",`Cap nhat trang thai ${ids.length} san pham thanh cong!`)
                 break;
             case "delete-all":
-                await Product.updateMany({ _id: { $in: ids } }, { deleted: true, deletedAt: new Date() })
+                await Product.updateMany(
+                    { _id: { $in: ids } },
+                    { 
+                        deleted: true, 
+                        // deletedAt: new Date() 
+                        deletedBy:{
+                            account_id: res.locals.user.id,
+                            deletedAt: new Date()
+                        } 
+                    }
+                )
                 req.flash("success",`Xoa ${ids.length} san pham thanh cong!`)
                 break;
             case "change-position":
@@ -128,7 +138,16 @@ module.exports.DeleteItem = async (req, res) => {
     try {
         const id = req.params.id;
 
-        await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() })
+        await Product.updateOne(
+            { _id: id }, 
+            { 
+                deleted: true, 
+                deletedBy:{
+                    account_id: res.locals.user.id,
+                    deletedAt: new Date()
+                } 
+            }
+        )
 
         req.flash("success",`Xoa san pham thanh cong!`)
 
