@@ -2,37 +2,40 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-    +alert-error("5000")
+    if(role.permissions.includes("products-category-view"))
+        +alert-error("5000")
 
-    if(product.title)
-        h1(class="mb-4") #{product.title}
-    
-    if(product.parent_id)
-        div(class="mb-4") Danh mục cha : <b>#{parent.title}</b>           
-            
-    if(product.thumbnail)
-        div(class="mb-4")
-            img(
-                src=product.thumbnail
-                style="width:100px"
-            )
-    if(product.status)
-        div(class="mb-4")
-            span Trạng thái: 
-            if(product.status === "active")
-                span(class="badge badge-success") Hoạt động 
-            else
-                span(class="badge badge-danger") Dừng hoạt động
-    
-    if(product.position)
-        div(class="mb-4") Vị trí: <b>#{product.position}</b>
+        if(product.title)
+            h1(class="mb-4") #{product.title}
+        
+        if(product.parent_id)
+            div(class="mb-4") Danh mục cha : <b>#{parent.title}</b>           
+                
+        if(product.thumbnail)
+            div(class="mb-4")
+                img(
+                    src=product.thumbnail
+                    style="width:100px"
+                )
+        if(product.status)
+            div(class="mb-4")
+                span Trạng thái: 
+                if(product.status === "active")
+                    span(class="badge badge-success") Hoạt động 
+                else
+                    span(class="badge badge-danger") Dừng hoạt động
+        
+        if(product.position)
+            div(class="mb-4") Vị trí: <b>#{product.position}</b>
 
-    if(product.description)
-        div(class="mb-4") !{product.description}
+        if(product.description)
+            div(class="mb-4") !{product.description}
 
-    a(
-        href=`${prefixAdmin}/product-category/edit/${product.id}`
-        class="btn btn-warning"
-    ) Chỉnh sửa
+        a(
+            href=`${prefixAdmin}/product-category/edit/${product.id}`
+            class="btn btn-warning"
+        ) Chỉnh sửa
 
-    script(src="/admin/js/products.js")
+        script(src="/admin/js/products.js")
+    else
+        h1 Bạn không có quyền truy cập!

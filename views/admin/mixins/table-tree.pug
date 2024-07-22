@@ -21,35 +21,53 @@ mixin table-tree(items, level = 1)
                     name="position"
                 )   
             td 
-                if item.status == "active"
-                    a(
-                        href="javascript:;"
-                        data-status=item.status
-                        data-id=item.id
-                        button-change-status
-                        class="badge badge-success"
-                    ) Hoat dong 
+                if(role.permissions.includes("products-category-edit"))
+                    if item.status == "active"
+                        a(
+                            href="javascript:;"
+                            data-status=item.status
+                            data-id=item.id
+                            button-change-status
+                            class="badge badge-success"
+                        ) Hoat dong 
+                    else
+                        a(
+                            href="javascript:;"
+                            data-status=item.status
+                            data-id=item.id
+                            button-change-status
+                            class="badge badge-danger"
+                        ) Dung hoat dong
                 else
-                    a(
-                        href="javascript:;"
-                        data-status=item.status
-                        data-id=item.id
-                        button-change-status
-                        class="badge badge-danger"
-                    ) Dung hoat dong 
+                    if item.status == "active"
+                        a(
+                            href="javascript:;"
+                            data-status=item.status
+                            data-id=item.id
+                            class="badge badge-success"
+                        ) Hoat dong 
+                    else
+                        a(
+                            href="javascript:;"
+                            data-status=item.status
+                            data-id=item.id
+                            class="badge badge-danger"
+                        ) Dung hoat dong
             td  
                 a(
                     href=`${prefixAdmin}/product-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                 ) Chi tiet 
-                a(
-                    href=`${prefixAdmin}/product-category/edit/${item.id}`
-                    class="btn btn-warning btn-sm"
-                ) Sua 
-                button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=item.id
-                ) Xoa
+                if(role.permissions.includes("products-category-edit"))
+                    a(
+                        href=`${prefixAdmin}/product-category/edit/${item.id}`
+                        class="btn btn-warning btn-sm"
+                    ) Sua 
+                if(role.permissions.includes("products-category-delete"))
+                    button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete
+                        data-id=item.id
+                    ) Xoa
         if item.children && item.children.length > 0
             +table-tree(item.children, level + 1)
