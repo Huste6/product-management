@@ -17,4 +17,6 @@ router.post(
     controller.createPOST
 );
 
+router.patch('/change-status/:status/:id',controller.changeStatus)
+
 module.exports = router;

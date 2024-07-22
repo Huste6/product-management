@@ -44,3 +44,21 @@ module.exports.createPOST = async (req,res) => {
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 }
+
+//[PATCH] /admin/accounts/change-status/:status/:id
+module.exports.changeStatus = async (req,res) => {
+    try{
+        await Account.updateOne(
+            {
+                _id: req.params.id
+            },{
+                status: req.params.status
+            }
+        )
+        req.flash("success","Cập nhật trạng thái tài khoản thành công!")
+        res.redirect("back");
+    }catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}

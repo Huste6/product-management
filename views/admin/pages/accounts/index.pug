@@ -1,8 +1,9 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
 
 block main 
+    +alert-success(5000)
     h1(class="mb-4") Danh sách tài khoản
-
     .card.mb-3 
         .card-header Danh sách
         .card-body 
@@ -67,3 +68,12 @@ block main
                                     button-delete
                                     data-id=item.id
                                 ) Xóa
+    //- form change status
+    form(
+        action=""
+        method="POST"
+        id="form-change-status"
+        data-path=`${prefixAdmin}/accounts/change-status`
+    )
+    script(src="/admin/js/account.js")
+    script(src="/admin/js/script.js")
