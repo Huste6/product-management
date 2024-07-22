@@ -12,11 +12,20 @@ body {
     top:0;
     z-index: 999;
 }
-.header .inner-logo a{
+.inner-logo a {
+    color: #ffffff;
     font-size: 24px;
-    font-weight: 700;
-    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
 }
+
+.text-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+}
+
 /* body */
 .body .sider{
     width: 150px;
