@@ -62,3 +62,48 @@ module.exports.changeStatus = async (req,res) => {
         res.status(500).send("Internal Server Error");
     }
 }
+
+// [GET] /admin/accounts/edit/:id
+module.exports.edit = async (req,res) => {
+    try{
+        const data = await Account.findOne({
+            _id: req.params.id,
+            deleted: false
+        })
+        const role = await Role.find({deleted: false})
+
+        res.render("admin/pages/accounts/edit",{
+            pageTitle: "Chỉnh sửa tài khoản",
+            data: data,
+            role: role
+        })
+    }catch(error){
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`)
+    }
+}
+
+// [PATCH] /admin/accounts/edit/:id
+module.exports.editPatch = async (req,res) => {
+    try{
+        const emailExist = await Account.findOne({
+            _id: {$ne: req.params.id},
+            email: req.body.email,
+            deleted: false,
+        })
+        if(emailExist){
+            req.flash("error","Email này đã tồn tại");
+        }else{
+            if(req.body.password){
+                req.body.password = md5(req.body.password)
+            }else{
+                delete req.body.password
+            }
+            await Account.updateOne({_id: req.params.id},req.body)
+            req.flash("success","Cập nhật thành công")
+        }
+        res.redirect("back");
+    }catch(error){
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}
