@@ -55,6 +55,7 @@ block main
                             th Vi tri
                             th Trang thai 
                             th Người tạo
+                            th Người cập nhật
                             th Hanh dong
                     tbody 
                         each item, index in products
@@ -115,6 +116,12 @@ block main
                                     p #{item.accountFullName}
                                     p
                                         +formatDateTime(item.createdBy.createdAt)
+                                td
+                                    - const updatedBy = item.updatedBy[item.updatedBy.length-1];
+                                    if(updatedBy)
+                                        p #{updatedBy.accountFullName}
+                                        p
+                                            +formatDateTime(updatedBy.updateAt)
                                 td
                                     a(
                                         href=`${prefixAdmin}/products/detail/${item.id}`

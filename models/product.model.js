@@ -36,6 +36,12 @@ const ProductSchema = new mongoose.Schema({
     account_id: String,
     deletedAt: Date
   },
+  updatedBy:[
+    {
+    account_id: String,
+    updateAt: Date
+    }
+  ]
 },{
   timestamps:true
 });
