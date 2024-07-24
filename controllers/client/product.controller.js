@@ -1,17 +1,15 @@
 const Product = require("../../models/product.model");
+const productHelper = require("../../helpers/product");
+
 // [GET] /product
 module.exports.index = async (req, res) => {
   try {
-    const products = await Product.find({
+    let products = await Product.find({
       status: "active",
       deleted: false,
     }).sort({position: "desc"})
-    ;
 
-    products.forEach((item) => {
-      item.newPrice = (item.price * (1 - item.discountPercentage / 100)).toFixed(0);
-    });
-
+    products = productHelper.priceNewProducts(products);
 
     res.render("client/pages/products/index", {
       pageTitle: "Trang danh sach san pham",
