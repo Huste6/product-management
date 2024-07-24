@@ -1,5 +1,7 @@
 const Product = require("../../models/product.model");
 const productHelper = require("../../helpers/product");
+const ProductCategory = require("../../models/product-category.model");
+const ProductCategoryhelper = require("../../helpers/product-category")
 
 // [GET] /product
 module.exports.index = async (req, res) => {
@@ -39,4 +41,26 @@ module.exports.detail = async (req,res) => {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
+}
+// [GET] /product/:slugCategory
+module.exports.Category = async (req,res) =>{
+  let category = await ProductCategory.findOne({
+    slug:req.params.slugCategory,
+    deleted: false
+  })
+
+  const listSubCategory = await ProductCategoryhelper.getSubCategory(category.id)
+  const listSubCategoryID = listSubCategory.map(item => item.id)
+
+  let product = await Product.find({
+    product_category_id: {$in: [category.id, ...listSubCategoryID]},
+    deleted: false
+  }).sort({position: "desc"})
+
+  product = productHelper.priceNewProducts(product);
+
+  res.render("client/pages/products/index",{
+    pageTitle: category.title,
+    products: product
+  })
 }
