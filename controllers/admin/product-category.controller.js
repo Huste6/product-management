@@ -40,16 +40,21 @@ module.exports.create = async (req, res) => {
 //[POST] /admin/product-category/create
 module.exports.createPost = async (req, res) => {
     try {
-        if(req.body.position == ""){
-            const CountProductCategory = await ProductCategory.countDocuments();
-            req.body.position = CountProductCategory + 1;
+        const permissions = res.locals.role.permissions;
+        if(permissions.include("products-category-create")){
+            if(req.body.position == ""){
+                const CountProductCategory = await ProductCategory.countDocuments();
+                req.body.position = CountProductCategory + 1;
+            }else{
+                req.body.position = parseInt(req.body.position);
+            }
+            const record = new ProductCategory(req.body);
+            await record.save();
+            res.redirect(`${systemConfig.prefixAdmin}/product-category`)
         }else{
-            req.body.position = parseInt(req.body.position);
+            res.send("403");
+            return;
         }
-        const record = new ProductCategory(req.body);
-        await record.save();
-
-        res.redirect(`${systemConfig.prefixAdmin}/product-category`)
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
