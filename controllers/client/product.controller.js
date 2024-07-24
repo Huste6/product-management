@@ -23,25 +23,40 @@ module.exports.index = async (req, res) => {
   }
 };
 // [GET] /product/:slug
-module.exports.detail = async (req,res) => {
-  try{
+module.exports.detail = async (req, res) => {
+  try {
     const find = {
       deleted: false,
-      slug: req.params.slug,
+      slug: req.params.slugProduct,
       status: "active"
     };
 
     const product = await Product.findOne(find);
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+
+    if (product.product_category_id) {
+      const category = await ProductCategory.findOne({
+        _id: product.product_category_id,
+        status: "active",
+        deleted: false
+      });
+      product.category = category || null; 
+    }
+
+    product.priceNew = productHelper.priceNewOne(product)
     
-    res.render("client/pages/products/detail",{
+    res.render("client/pages/products/detail", {
       pageTitle: "Chi tiết sản phẩm",
       product: product
-    })
-  }catch(error){
+    });
+  } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
-}
+};
+
 // [GET] /product/:slugCategory
 module.exports.Category = async (req,res) =>{
   let category = await ProductCategory.findOne({
@@ -49,8 +64,8 @@ module.exports.Category = async (req,res) =>{
     deleted: false
   })
 
-  const listSubCategory = await ProductCategoryhelper.getSubCategory(category.id)
-  const listSubCategoryID = listSubCategory.map(item => item.id)
+  let listSubCategory = await ProductCategoryhelper.getSubCategory(category.id)
+  let listSubCategoryID = listSubCategory.map(item => item.id)
 
   let product = await Product.find({
     product_category_id: {$in: [category.id, ...listSubCategoryID]},
