@@ -10,8 +10,14 @@ module.exports.index = async (req, res) => {
         status: "active"
     });
     productsFeatured = productHelper.priceNewProducts(productsFeatured);
+    // san pham moi nhat
+    const productsNew = await Product.find({
+        deleted:false,
+        status:"active"
+    }).sort({position:"desc"}).limit(6);
     res.render("client/pages/home/index", {
         pageTitle: "Trang chu",
-        productsFeatured: productsFeatured
+        productsFeatured: productsFeatured,
+        productsNew: productsNew
     });
 };
