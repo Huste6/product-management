@@ -5,6 +5,7 @@ const searchRouter = require("./search.router");
 const cartMiddleware = require("../../middlewares/client/cart.middleware")
 const CartRouter = require("./cart.router");
 const checkoutRouter = require('./checkout.router')
+const UserRouter = require('./user.router')
 
 module.exports = (app) => {
     app.use(categoryMiddleware.category)
@@ -14,4 +15,5 @@ module.exports = (app) => {
     app.use("/search", searchRouter);
     app.use("/cart",CartRouter)
     app.use("/checkout",checkoutRouter);
+    app.use("/user",UserRouter);
 }
