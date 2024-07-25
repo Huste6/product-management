@@ -5,5 +5,5 @@ module.exports.priceNewProducts = (productsFeatured) => {
     return productsFeatured;
 };
 module.exports.priceNewOne = (product) => {
-    return (product.price * (1 - product.discountPercentage / 100)).toFixed(0);
+    return parseInt((product.price * (1 - product.discountPercentage / 100)).toFixed(0));
 };
