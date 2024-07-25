@@ -34,3 +34,38 @@ module.exports.registerPost = async (req, res) => {
         return res.redirect("back");
     }
 }
+//[GET] /user/login
+module.exports.login = async (req, res) => {
+    res.render("client/pages/user/login", {
+        pageTitle: "Đăng nhập tài khoản"
+    });
+}
+//[POST] /user/login
+module.exports.loginPost = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const password = md5(req.body.password);
+        const user = await User.findOne({
+            email: email,
+            deleted:false
+        })
+        if(!user){
+            req.flash("error", "Không tồn tại email!");
+            return res.redirect("back");
+        }
+        if(user.password !== password){
+            req.flash("error", "Sai mật khẩu!");
+            return res.redirect("back");
+        }
+        if(user.status === "inactive"){
+            req.flash("error","Tài khoản đang bị khóa");
+            return res.redirect("back");
+        }
+        res.cookie("tokenUser",user.tokenUser);
+        res.redirect("/")
+    }catch(error){
+        console.error(error);
+        req.flash("error", "Đã xảy ra lỗi!");
+        return res.redirect("back");
+    }
+}
