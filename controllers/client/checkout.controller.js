@@ -72,8 +72,21 @@ module.exports.order = async (req,res) => {
 }
 //[GET] /checkout/success/:OrderID
 module.exports.success = async (req,res) => {
+    const order = await Order.findOne({
+        _id: req.params.OrderID
+    });
+    for (const product of order.products) {
+        const productInfo = await Product.findOne({
+            _id:product.product_id
+        }).select("title thumbnail price discountPercentage");
+        product.productInfo=productInfo;
+        product.priceNew = ProductHelper.priceNewOne(productInfo);
+        product.totalPrice = product.priceNew * product.quantity;
+    }
+    order.totalPrice = order.products.reduce((sum,item) => sum + item.totalPrice ,0)
     req.flash("success","Đặt hàng thành công!");
     res.render("client/pages/checkout/success",{
-        pageTitle: "Đặt hàng thành công"
+        pageTitle: "Đặt hàng thành công",
+        order: order
     });
 }
