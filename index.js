@@ -43,9 +43,7 @@ app.locals.moment = moment
 //socket
 const server = http.createServer(app);
 const io = new Server(server);
-io.on('connection', (socket) => {
-    console.log('a user connected ',socket.id);
-})
+global._io = io
 //end socket
 
 // Routes
