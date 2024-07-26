@@ -11,7 +11,8 @@ const routeAdmin = require("./routes/admin/index.router")
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
-
+const http = require('http');
+const {Server} = require("socket.io");
 database.connect();
 
 const app = express();
@@ -39,6 +40,14 @@ app.use(express.static(`${__dirname}/public`));
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 app.locals.moment = moment
 
+//socket
+const server = http.createServer(app);
+const io = new Server(server);
+io.on('connection', (socket) => {
+    console.log('a user connected ',socket.id);
+})
+//end socket
+
 // Routes
 route(app);
 routeAdmin(app);
@@ -48,6 +57,6 @@ app.get("*",(req,res)=>{
     });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`example app listen on port ${port}`);
 });
