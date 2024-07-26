@@ -66,15 +66,21 @@ module.exports.loginPost = async (req, res) => {
             req.flash("error","Tài khoản đang bị khóa");
             return res.redirect("back");
         }
-        
-        await Cart.updateOne(
-            {
-                _id: req.cookies.cartId
-            },
-            {
-                user_id: user.id
-            }
-        )
+        const cart = await Cart.findOne({
+            user_id: user.id
+        });
+        if(cart){
+            res.cookie("cartId",cart.id);
+        }else{
+            await Cart.updateOne(
+                {
+                    _id: req.cookies.cartId
+                },
+                {
+                    user_id: user.id
+                }
+            )
+        } 
         res.cookie("tokenUser",user.tokenUser);
         res.redirect("/")
     }catch(error){
@@ -85,6 +91,7 @@ module.exports.loginPost = async (req, res) => {
 }
 //[GET] /user/logout
 module.exports.logout = async (req,res) => {
+    res.clearCookie("cartId")
     res.clearCookie("tokenUser");
     res.redirect("/")
 }
