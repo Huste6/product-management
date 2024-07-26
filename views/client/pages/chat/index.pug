@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Chat")
+
+        .row 
+            .col-12 
+                .chat
+                    .inner-body 
+                        .inner-incoming 
+                            .inner-name Ban
+                            .inner-content 
+                                | Eu
+                        .inner-outgoing 
+                            .inner-content 
+                                | Oi
+                        .inner-incoming 
+                            .inner-name Ban
+                            .inner-content 
+                                | Eu xin chao moi nguoi nha hehehehehe
+                        .inner-outgoing 
+                            .inner-content 
+                                | Oi Eu xin chao moi nguoi nha hehehehehe
+                    .inner-foot 
+                        form(
+                            class="inner-form"
+                            action=""
+                        )           
+                            input(
+                                type="text"
+                                placeholder="Nhap noi dung..."
+                                name="content"
+                            ) 
+                            button 
+                                i.fa-solid.fa-paper-plane
