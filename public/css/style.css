@@ -241,3 +241,12 @@ ul li{
     color: #3d35e6
 }
 /* end chat */
+/* emoji icon */
+.tooltip {
+    visibility: hidden;
+}
+.tooltip.shown{
+    visibility: visible;
+    opacity: 1;
+}
+/* end emoji icon */
