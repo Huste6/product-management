@@ -1,12 +1,12 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 // CLIENT_SEND_MESSAGE
 const FormSendData = document.querySelector(".chat .inner-form")
-if(FormSendData){
+if (FormSendData) {
     FormSendData.addEventListener("submit", (e) => {
         e.preventDefault();
         const content = e.target.elements.content.value;
-        if(content){
-            socket.emit("CLIENT_SEND_MESSAGE",content);
+        if (content) {
+            socket.emit("CLIENT_SEND_MESSAGE", content);
             e.target.elements.content.value = "";
         }
     })
@@ -14,14 +14,15 @@ if(FormSendData){
 // END CLIENT_SEND_MESSAGE
 
 // SERVER_RETURN_MESSAGE
-socket.on("SERVER_RETURN_MESSAGE",(data)=>{
+socket.on("SERVER_RETURN_MESSAGE", (data) => {
     const myId = document.querySelector("[my-id]").getAttribute("my-id");
     const body = document.querySelector(".chat .inner-body");
     const div = document.createElement("div");
+    const boxTyping = document.querySelector(".chat .inner-list-typing");
     let htmlFullname = "";
-    if(myId == data.userId){
+    if (myId == data.userId) {
         div.classList.add("inner-outgoing");
-    }else{       
+    } else {
         htmlFullname = `<div class="inner-name">${data.fullname}</div>`
         div.classList.add("inner-comming");
     }
@@ -29,14 +30,14 @@ socket.on("SERVER_RETURN_MESSAGE",(data)=>{
         ${htmlFullname}
         <div class="inner-content">${data.content}</div>
     `
-    body.appendChild(div);
+    body.insertBefore(div, boxTyping);
     body.scrollTop = bodyChat.scrollHeight
 })
 // END SERVER_RETURN_MESSAGE
 
 // Scroll Chat to Bottom
 const bodyChat = document.querySelector(".chat .inner-body");
-if(bodyChat){
+if (bodyChat) {
     bodyChat.scrollTop = bodyChat.scrollHeight
 }
 // End Scroll Chat to Bottom
@@ -44,7 +45,7 @@ if(bodyChat){
 // show icon chat
 // show Popup
 const buttonIcon = document.querySelector('.button-icon');
-if(buttonIcon){
+if (buttonIcon) {
     const tooltip = document.querySelector('.tooltip');
     Popper.createPopper(buttonIcon, tooltip)
     buttonIcon.onclick = () => {
@@ -52,14 +53,30 @@ if(buttonIcon){
     }
 }
 // end show Popup
+// function show typing
+var Timeout;
+const showTyping = () => {
+    socket.emit("CLIENT_SEND_TYPING", "show")
+
+    clearTimeout(Timeout);
+
+    Timeout = setTimeout(() => {
+        socket.emit("CLIENT_SEND_TYPING", "hidden")
+    }, 3000)
+}
+// end function show typing
 
 // insert icon to input
 const emojiPicker = document.querySelector("emoji-picker");
-if(emojiPicker){
+if (emojiPicker) {
     const inputChat = document.querySelector(".chat .inner-form input[name='content']");
-    emojiPicker.addEventListener('emoji-click',(event)=>{
+    emojiPicker.addEventListener('emoji-click', (event) => {
         const icon = event.detail.unicode;
         inputChat.value = inputChat.value + icon;
+        const end = inputChat.value.length;
+        inputChat.setSelectionRange(end,end);
+        inputChat.focus();
+        showTyping();
     })
 }
 // end insert icon to input
@@ -68,20 +85,18 @@ if(emojiPicker){
 // typing
 // input keyup
 const inputChat = document.querySelector(".chat .inner-form input[name='content']");
-if(inputChat){
-    inputChat.addEventListener("keyup",()=>{
-        socket.emit("CLIENT_SEND_TYPING","show")
-        setTimeout(()=>{
-            socket.emit("CLIENT_SEND_TYPING","hidden")
-        },5000)
+if (inputChat) {
+    inputChat.addEventListener("keyup", () => {
+        showTyping();
     })
 }
 // end input keyup
 // SERVER_RETURN_TYPING
 const elementListTyping = document.querySelector(".chat .inner-body .inner-list-typing");
-if(elementListTyping){
+if (elementListTyping) {
     socket.on("SERVER_RETURN_TYPING", (data) => {
         if (data.type === "show") {
+            const bodyChat = document.querySelector(".chat .inner-body");
             const existTyping = elementListTyping.querySelector(`.box-typing[userId='${data.userId}']`);
             if (!existTyping) {
                 const div = document.createElement("div");
@@ -96,8 +111,9 @@ if(elementListTyping){
                     </div>
                 `;
                 elementListTyping.appendChild(div);
+                bodyChat.scrollTop = bodyChat.scrollHeight;
             }
-        } else if (data.type === "hidden")  {
+        } else if (data.type === "hidden") {
             const removeTyping = elementListTyping.querySelector(`.box-typing[userId='${data.userId}']`);
             if (removeTyping) {
                 elementListTyping.removeChild(removeTyping);
