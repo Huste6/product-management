@@ -64,3 +64,46 @@ if(emojiPicker){
 }
 // end insert icon to input
 // end show icon chat
+
+// typing
+// input keyup
+const inputChat = document.querySelector(".chat .inner-form input[name='content']");
+if(inputChat){
+    inputChat.addEventListener("keyup",()=>{
+        socket.emit("CLIENT_SEND_TYPING","show")
+        setTimeout(()=>{
+            socket.emit("CLIENT_SEND_TYPING","hidden")
+        },5000)
+    })
+}
+// end input keyup
+// SERVER_RETURN_TYPING
+const elementListTyping = document.querySelector(".chat .inner-body .inner-list-typing");
+if(elementListTyping){
+    socket.on("SERVER_RETURN_TYPING", (data) => {
+        if (data.type === "show") {
+            const existTyping = elementListTyping.querySelector(`.box-typing[userId='${data.userId}']`);
+            if (!existTyping) {
+                const div = document.createElement("div");
+                div.classList.add("box-typing");
+                div.setAttribute("userId", data.userId);
+                div.innerHTML = `
+                    <div class="inner-name">${data.fullname}</div>
+                    <div class="inner-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                elementListTyping.appendChild(div);
+            }
+        } else if (data.type === "hidden")  {
+            const removeTyping = elementListTyping.querySelector(`.box-typing[userId='${data.userId}']`);
+            if (removeTyping) {
+                elementListTyping.removeChild(removeTyping);
+            }
+        }
+    });
+}
+// END SERVER_RETURN_TYPING
+// end typing
