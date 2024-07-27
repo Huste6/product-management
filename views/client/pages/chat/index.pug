@@ -12,20 +12,12 @@ block main
             .col-12 
                 .chat
                     .inner-body 
-                        .inner-incoming 
-                            .inner-name Ban
-                            .inner-content 
-                                | Eu
-                        .inner-outgoing 
-                            .inner-content 
-                                | Oi
-                        .inner-incoming 
-                            .inner-name Ban
-                            .inner-content 
-                                | Eu xin chao moi nguoi nha hehehehehe
-                        .inner-outgoing 
-                            .inner-content 
-                                | Oi Eu xin chao moi nguoi nha hehehehehe
+                        each chat in chats 
+                            div(class=(chat.user_id == user.id ? "inner-outgoing" : "inner-incoming"))
+                                if(chat.user_id != user.id)
+                                    .inner-name #{chat.infoUser.fullname}
+                                .inner-content 
+                                    | #{chat.content}
                     .inner-foot 
                         form(
                             class="inner-form"
