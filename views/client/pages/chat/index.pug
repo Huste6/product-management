@@ -15,14 +15,30 @@ block main
                             if chat.user_id != user.id
                                 .inner-incoming
                                     .inner-name #{chat.infoUser.fullname}
-                                    .inner-content 
-                                        | #{chat.content}
+                                    if(chat.content)
+                                        .inner-content 
+                                            | #{chat.content}
+                                    if(chat.images)
+                                        .inner-images 
+                                            each image in chat.images 
+                                                img(src=image)
                             else
                                 .inner-outgoing
-                                    .inner-content 
-                                        | #{chat.content}
+                                    if(chat.content)
+                                        .inner-content 
+                                            | #{chat.content}
+                                    if(chat.images)
+                                        .inner-images 
+                                            each image in chat.images 
+                                                img(src=image)
                         
                         div(class="inner-list-typing")
+
+                    .inner-preview-images            
+                        div(
+                            class="custom-file-container" 
+                            data-upload-id="uploadImage"
+                        ) 
                     .inner-foot 
                         form(
                             class="inner-form"
@@ -32,7 +48,8 @@ block main
                                 type="text"
                                 placeholder="Nhap noi dung..."
                                 name="content"
-                            ) 
+                            )
+                            label(class="button-image btn btn-light mx-2" for="file-upload-with-preview-uploadImage") <i class="fa-regular fa-image"></i>
                             span(class="button-icon btn btn-light mx-2") <i class="fa-regular fa-face-smile"></i>
                             button 
                                 i.fa-solid.fa-paper-plane
