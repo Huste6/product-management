@@ -4,7 +4,9 @@ const User = require("../../models/user.model")
 //[GET] /chat
 module.exports.index = async (req,res) => {
     const userId = res.locals.user.id;
-    _io.on('connection',  (socket) => {
+    const fullname = res.locals.user.fullname;
+
+    _io.once('connection',  (socket) => {
         socket.on("CLIENT_SEND_MESSAGE", async (content)=>{
             // Luu vao db
             const chat = new Chat({
@@ -12,6 +14,12 @@ module.exports.index = async (req,res) => {
                 content: content
             })
             await chat.save();
+            // tra data ve client
+            _io.emit("SERVER_RETURN_MESSAGE", {
+                userId: userId,
+                fullname: fullname,
+                content: content
+            });
         })
     })
     // lay data tu db

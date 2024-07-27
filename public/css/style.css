@@ -177,6 +177,7 @@ ul li{
     padding: 15px;
     display: flex;
     flex-direction: column;
+    max-height: 450px;
 }
 .inner-incoming, .inner-outgoing {
     max-width: 50%;
