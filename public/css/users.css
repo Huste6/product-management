@@ -55,4 +55,16 @@
 .box-users.refuse [btn-deleted-friend]{
     display: inline-block;
 }
+.box-users [btn-accepted-friend]{
+    display: none;
+}
+.box-users.accepted [btn-accept-friend]{
+    display: none;
+}
+.box-users.accepted [btn-refuse-friend]{
+    display: none;
+}
+.box-users.accepted [btn-accepted-friend]{
+    display: inline-block;
+}
 /* end box-users */

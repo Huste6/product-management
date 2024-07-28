@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
         listFriend:[ // danh sách bạn bè
             {
                 user_id: String,
-                // room_chat_id: String
+                room_chat_id: String
             }
         ],
         deleted:{
