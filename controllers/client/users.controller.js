@@ -80,3 +80,23 @@ module.exports.accept = async (req,res)=>{
         users:users
     });
 }
+//[GET] /users/friends
+module.exports.friends = async (req,res) => {
+    const userID = res.locals.user.id;
+    const users = await User.findOne({
+        _id: userID
+    }).exec();
+    for (const user of users.listFriend) {
+        const friend = await User.findOne({
+            _id: user.user_id
+        }).select("fullname avatar").exec();;
+        if(friend){
+            user.fullname = friend.fullname
+            user.avatar = friend.avatar
+        }
+    }
+    res.render("client/pages/users/friends", {
+        pageTitle: "Danh sách bạn bè",
+        users: users.listFriend
+    });
+}
