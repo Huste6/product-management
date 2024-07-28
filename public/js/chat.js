@@ -1,6 +1,6 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 // file upload with preview
-const upload = new FileUploadWithPreview.FileUploadWithPreview('uploadImage',{
+const upload = new FileUploadWithPreview.FileUploadWithPreview('uploadImage', {
     multiple: true,
     maxFileCount: 6
 });
@@ -43,12 +43,12 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
         htmlFullname = `<div class="inner-name">${data.fullname}</div>`
         div.classList.add("inner-comming");
     }
-    if(data.content){
+    if (data.content) {
         htmlContent = `
             <div class="inner-content">${data.content}</div>
         `;
     }
-    if(data.images.length > 0){
+    if (data.images.length > 0) {
         htmlImages = `<div class="inner-images">`;
         for (const image of data.images) {
             htmlImages += `<img src=${image}>`
@@ -108,7 +108,7 @@ if (emojiPicker) {
         const icon = event.detail.unicode;
         inputChat.value = inputChat.value + icon;
         const end = inputChat.value.length;
-        inputChat.setSelectionRange(end,end);
+        inputChat.setSelectionRange(end, end);
         inputChat.focus();
         showTyping();
     })
@@ -160,7 +160,39 @@ if (elementListTyping) {
 
 // preview full image
 const bodyChatPreview = document.querySelector(".chat .inner-body");
-if(bodyChatPreview){
+if (bodyChatPreview) {
     const gallery = new Viewer(bodyChatPreview);
 }
 // end preview full image
+
+// button delete message
+const ButtonShowOption = document.querySelectorAll('.ellipsis-button');
+if (ButtonShowOption.length > 0) {
+    ButtonShowOption.forEach(button => {
+        button.addEventListener("click", (event) => {
+            const optionsMenu = event.currentTarget.nextElementSibling;
+            optionsMenu.classList.toggle('hidden');
+
+            const deleteButton = optionsMenu.querySelector('.delete-button');
+            if (deleteButton && !deleteButton.dataset.listenerAttached) {
+                deleteButton.addEventListener("click", () => {
+                    const messageElement = button.closest('[message-id]');
+                    const userIdDeleteChat = messageElement.getAttribute('message-id');
+                    socket.emit("CLIENT_SEND_DELETE_ACTION", userIdDeleteChat);
+                });
+                deleteButton.dataset.listenerAttached = 'true'; 
+            }
+        });
+    });
+}
+// end button delete message
+
+// SERVER_RETURN_DELETE_ACTION
+socket.on("SERVER_RETURN_DELETE_ACTION", (chatId) => {
+    const messageIdDelete = document.querySelector(`div[message-id="${chatId}"]`);
+    if(messageIdDelete){
+        const bodyChatTodelete = document.querySelector('.chat .inner-body');
+        bodyChatTodelete.removeChild(messageIdDelete);
+    }
+})
+// end SERVER_RETURN_DELETE_ACTION

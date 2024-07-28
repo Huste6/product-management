@@ -34,5 +34,13 @@ module.exports = (res) => {
                 type: type
             });
         })
+        // delete chat
+        socket.on("CLIENT_SEND_DELETE_ACTION", async (chatId)=>{
+            // xoa tin nhan ra khoi db
+            await Chat.deleteOne({
+                _id: chatId
+            })
+            _io.emit("SERVER_RETURN_DELETE_ACTION", chatId)
+        })
     })
 }

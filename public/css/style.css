@@ -194,12 +194,14 @@ ul li{
     padding: 10px 15px;
     border-radius: 20px;
 }
-.inner-outgoing {
+.inner-outgoing .inner-content{
     background-color: #3d35e6;
     color: white;
-    align-self: flex-end;
     padding: 10px 15px;
     border-radius: 20px;
+}
+.inner-outgoing{
+    align-self: flex-end;
 }
 .inner-name {
     font-weight: bold;
@@ -273,6 +275,34 @@ ul li{
 .chat .inner-preview-images .image-preview-item{
     width: 90px;
     background-size: contain;
+}
+.options-menu.hidden {
+    display: none;
+}
+
+.message-options {
+    position: relative;
+    display: inline-block;
+}
+
+.options-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+}
+.ellipsis-button{
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.delete-button{
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 /* end chat */
 /* emoji icon */

@@ -13,7 +13,7 @@ block main
                     .inner-body 
                         each chat in chats 
                             if chat.user_id != user.id
-                                .inner-incoming
+                                div(class="inner-incoming" message-id=chat.id)
                                     .inner-name #{chat.infoUser.fullname}
                                     if(chat.content)
                                         .inner-content 
@@ -22,8 +22,13 @@ block main
                                         .inner-images 
                                             each image in chat.images 
                                                 img(src=image)
+                                    .message-options
+                                        button(class="ellipsis-button")
+                                            i.fa.fa-ellipsis-h
+                                        .options-menu.hidden
+                                            button(class="delete-button") Xóa
                             else
-                                .inner-outgoing
+                                div(class="inner-outgoing" message-id=chat.id)
                                     if(chat.content)
                                         .inner-content 
                                             | #{chat.content}
@@ -31,7 +36,11 @@ block main
                                         .inner-images 
                                             each image in chat.images 
                                                 img(src=image)
-                        
+                                    .message-options
+                                        button(class="ellipsis-button")
+                                            i.fa.fa-ellipsis-h
+                                        .options-menu.hidden
+                                            button(class="delete-button") Xóa
                         div(class="inner-list-typing")
 
                     .inner-preview-images            
