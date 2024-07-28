@@ -31,7 +31,15 @@ module.exports = (res) => {
                     $push: {requestFriend: userID}
                 })
             }
-            // _io.emit("SERVER_ADD_FRIEND",);
+            // Lấy ra độ dài accept friend của B và trả về cho B
+            const infoUserB = await User.findOne({
+                _id: userID
+            });
+            const lengthAcceptFriend = infoUserB.accessFriend.length;
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND",{
+                userID: userID,
+                lengthAcceptFriend: lengthAcceptFriend
+            });
         })
         // Chức năng hủy yêu cầu
         socket.on("CLIENT_CANCEL_FRIEND",async (userID)=>{
