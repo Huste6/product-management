@@ -63,5 +63,35 @@ module.exports = (res) => {
                 })
             } 
         })
+        // Chức năng từ chối yêu cầu
+        socket.on("CLIENT_REFUSE_FRIEND",async (userID)=>{
+            const myUserID = res.locals.user.id; // ID của B
+            // userID la ID cua A
+
+            //hủy id của A vào acceptFriend của B
+            const existUserAinB = await User.findOne({
+                _id:myUserID,
+                accessFriend: userID
+            });
+            if(existUserAinB){
+                await User.updateOne({
+                    _id:myUserID
+                },{
+                    $pull: {accessFriend: userID}
+                })
+            }
+            //hủy id của B vào requestFriend của A
+            const existUserBinA = await User.findOne({
+                _id:userID,
+                requestFriend: myUserID
+            });
+            if(existUserBinA){
+                await User.updateOne({
+                    _id:userID
+                },{
+                    $pull: {requestFriend: myUserID}
+                })
+            } 
+        })
     })
 }
