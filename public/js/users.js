@@ -72,10 +72,11 @@ if(badgeUsersAccept){
 // END SERVER_RETURN_LENGTH_ACCEPT_FRIEND
 
 //SERVER_RETURN_INFO_ACCEPT_FRIEND
-const dataUsersAccept = document.querySelector("[data-users-accept]");
-if(dataUsersAccept){
-    const userId = dataUsersAccept.getAttribute("data-users-accept");
-    socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND",(data) => {
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND",(data) => {
+    //trang loi moi da nhan
+    const dataUsersAccept = document.querySelector("[data-users-accept]");
+    if(dataUsersAccept){
+        const userId = dataUsersAccept.getAttribute("data-users-accept");
         if(userId === data.userID){
             // Render user on the interface
             const newBoxUser = document.createElement("div");
@@ -129,8 +130,19 @@ if(dataUsersAccept){
             AcceptedFriend(buttonAccept);
             //End Accept Friend
         }
-    });
-}
+    }
+    //trang danh sách người dùng
+    const dataUsersNotFriend = document.querySelector("[data-users-not-friend]");
+    if(dataUsersNotFriend){
+        const userId = dataUsersNotFriend.getAttribute("data-users-not-friend");
+        if(userId === data.userID){
+            const boxUSerRemove = dataUsersNotFriend.querySelector(`[user-id='${data.infoUserA._id}']`);
+            if(boxUSerRemove){
+                dataUsersNotFriend.removeChild(boxUSerRemove);
+            }
+        }
+    }
+});
 //END SERVER_RETURN_INFO_ACCEPT_FRIEND
 
 //SERVER_RETURN_USER_ID_CANCEL_FRIEND
