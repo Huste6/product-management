@@ -40,6 +40,14 @@ module.exports = (res) => {
                 userID: userID,
                 lengthAcceptFriend: lengthAcceptFriend
             });
+            // Lấy thông tin của A và trả về cho B
+            const infoUserA = await User.findOne({
+                _id:myUserID
+            }).select("id avatar fullname");
+            socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND",{
+                userID: userID,
+                infoUserA: infoUserA
+            })
         })
         // Chức năng hủy yêu cầu
         socket.on("CLIENT_CANCEL_FRIEND",async (userID)=>{
@@ -78,6 +86,11 @@ module.exports = (res) => {
             socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND",{
                 userID: userID,
                 lengthAcceptFriend: lengthAcceptFriend
+            });
+            //Lấy id của A trả về cho B
+            socket.broadcast.emit("SERVER_RETURN_USER_ID_CANCEL_FRIEND",{
+                userIDA: myUserID,
+                userIDB: userID
             });
         })
         // Chức năng từ chối yêu cầu
