@@ -20,6 +20,15 @@ block main
                             ) 
                         div(class="inner-info")
                             div(class="inner-name") #{user.fullname}
+                            div(class="inner-buttons")
+                                a(
+                                    href="#"
+                                    class="btn btn-sm btn-primary mr-1"
+                                ) Nhan tin
+                        div(
+                            class="inner-status"
+                            status=user.statusOnline
+                        ) <i class="fa-solid fa-circle"></i>
                             
 block script
     script(src="/js/users.js") 

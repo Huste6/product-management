@@ -67,4 +67,12 @@
 .box-users.accepted [btn-accepted-friend]{
     display: inline-block;
 }
+.box-users .inner-status{
+    font-size: 12px ;
+    color: greenyellow;
+    opacity: 0;
+}
+.box-users .inner-status[status="online"]{
+    opacity: 1;
+}
 /* end box-users */
