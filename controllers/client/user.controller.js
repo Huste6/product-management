@@ -88,7 +88,9 @@ module.exports.loginPost = async (req, res) => {
         },{
             statusOnline: "online"
         }) 
-
+        _io.once('connection',  (socket) => {
+            socket.broadcast.emit("SERVER_RETURN_USER_ONLINE",user.id);
+        })
         res.redirect("/")
     }catch(error){
         console.error(error);
