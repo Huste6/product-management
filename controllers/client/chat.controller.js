@@ -6,6 +6,7 @@ const roomchat = require("../../models/room-chats.model")
 //[GET] /chat/:roomChatId
 module.exports.index = async (req,res) => {
     const roomChatId = req.params.roomChatId;
+    const myUser = res.locals.user.id;
 
     // Socket 
     ChatSocket(req, res);
@@ -26,9 +27,22 @@ module.exports.index = async (req,res) => {
         _id:roomChatId,
         deleted: false
     })
+    
+    // Hiện thị các user có trong phòng chat
+    const usersID = [];
+    for (const people of infoRoomChat.users) {
+        usersID.push(people.user_id);
+    }
+    const users = await User.find({
+        _id: {$in: usersID},
+        status:"active",
+        deleted:false
+    }).select("id avatar fullname statusOnline");
+
     res.render("client/pages/chat/index",{
         pageTitle: "Chat",
         chats: chats,
-        infoRoomChat: infoRoomChat
+        infoRoomChat: infoRoomChat,
+        users: users
     })
 }
