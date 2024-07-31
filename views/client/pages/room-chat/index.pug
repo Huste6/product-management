@@ -11,20 +11,21 @@ block main
             a(
                 href="/room-chat/create"
                 class="btn btn-sm btn-success mr-1"
-            ) Tao phong chat 
+            ) Tạo phòng chat
     
     .row 
-        .col-6 
-            div(class="box-room")
-                div(class="inner-avatar")
-                    img(
-                        src=""
-                        alt="phong abc"
-                    )
-                div(class="inner-info")
-                    div(class="inner-name") phong abc 
-                    duv(class="inner-buttons")
-                        a(
-                            href="#"
-                            class="btn btn-sm btn-primary mr-1"
-                        ) Nhan tin
+        each room in listRoomChat
+            .col-6 
+                div(class="box-room")
+                    div(class="inner-avatar")
+                        img(
+                            src="https://robohash.org/NM2.png?set=set1"
+                            alt=room.title
+                        )
+                    div(class="inner-info")
+                        div(class="inner-name") #{room.title}
+                        duv(class="inner-buttons")
+                            a(
+                                href=`/chat/${room.id}`
+                                class="btn btn-sm btn-primary mr-1"
+                            ) Nhắn tin
